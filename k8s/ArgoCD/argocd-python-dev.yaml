@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web-app-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/HayderSarhan/S25-core-course-labs.git
+    targetRevision: lab13
+    path: k8s/web-app
+    helm:
+      valueFiles:
+        - values-dev.yaml
+        - secrets.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  syncPolicy:
+    syncOptions:
+    # https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/#create-namespace
+    - CreateNamespace=true
+    automated: {}
+      # selfHeal: true
+      # prune: true
